@@ -121,3 +121,50 @@ button{
     margin-right: 2rem;
 }
   
+.next-btn {
+    width: 9rem;
+    height: 2.5rem;
+}
+  
+.result-box {
+    margin: 20rem 10rem;
+    padding: 1rem;
+    border: 5px solid black;
+    border-radius: 1rem;
+    width: 80%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+  
+.result-title {
+    font-size: 3rem;
+    margin: 1rem;
+  }
+  
+  .result-score {
+    border: 1px solid #363636;
+    height: 3rem;
+    width: 25%;
+    margin: 1rem;
+}
+  
+.result-btn {
+    display: flex;
+    justify-content: center;
+    width: 50%;
+    margin: 1rem;
+    gap: 1rem;
+}
+  
+.restart {
+    width: 8rem;
+    height: 2rem;
+}
+  
+.quit {
+    width: 8rem;
+    height: 2rem;
+}
+  
