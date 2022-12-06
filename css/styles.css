@@ -9,7 +9,7 @@ body {
   margin: 0;
   width: 100vw;
   height: 100vh;
-  background-color: steelblue;
+  background-color: rgb(148, 10, 217);
 }
 button{
     cursor: pointer;
