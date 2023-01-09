@@ -8,48 +8,53 @@
     <title>Code Quiz</title>
 </head>
 <body>
-    <!-- Landing page with start button -->
-    <section class="landing-page">
-        <h1 class="quiz-title">CODING QUIZ</h1>
-        <button class="start-btn">START</button>
-    </section>
-    
-    <!-- Main container with title and timer -->
-    <section class="container hidden">
-        <header>
-            <div class="header-container">
-                <h1 class="header-h1">Coding Quiz</h1>
-                <div class="timer"></div>
+    <div class="timer-count" value="0"></div>
+
+    <div class="card">
+
+        <!-- questions -->
+        <div id="question-cards" class="hide">
+            <div id="question"></div>
+            <div id="answer-buttons" class="button-grid">
             </div>
-        </header>
-    
-         <!-- Quiz container with questions and answer options  -->
-        <main class="quiz-container">
-            <h1 class="questions">What does HTML stand for?</h1>
-    
-            <div class="answer-buttons">
-                <button class="answer-btn">Answer 1</button>
-                <button class="answer-btn">Answer 2</button>
-                <button class="answer-btn">Answer 3</button>
-                <button class="answer-btn">Answer 4</button>
-            </div>
-        </main>
-        <footer class="footer">
-            <h2 class="question-tracker">1 of 5 Questions</h2>
-            <a href="#" class="high-scores">View high scores</a>
-            <button class="next-btn">Next</button>
-        </footer>
-    </section>
-    
-    <section class="result-box" id="hide">
-        <h1 class="result-title">You've completed the Quiz!</h1>
-        <div class="result-score"></div>
-        <div class="result-btn">
-            <button class="restart">Restart Quiz</button>
-            <button class="quit">Quit Quiz</button>
+            <p id="correct"></p>
         </div>
-    </section>
+
+        <!-- start page -->
+        <div class="quiz-start">
+            <button id="start-button" class="start-button button">Start Quiz</button>
+        </div>
+
+        <!-- finish quiz -->
+        <div id="initials-form" class="hide">
+            <h2>All done!</h2>
+            <h2>Points: <span class="points">0 </span> </h2>
+            <form action="" method="post">
+            <ul>
+                <li>
+                    <label for="initials">Initials:</label>
+                    <input type="text" id="initials" name="user_initials"/>
+                </li>
+                <li>
+                    <button type="submit" class="form-button button">Submit</button>
+                </li>
+            </ul>
+            </form>
+        </div>
+
+        <!-- score page -->
+        <div id="scoreboard" class="hide">
+            <h3>Highscores: </h3>
+            <ol class="highscore"></ol>
+            <button id="playagain-btn" class="button">Play Again</button>
+        </div>
+
+
+    </div>
+    <script src="./develop/script.js"></script>
+
     
-    <script src="./js/script.js"></script>
+    
+    
 </body>
 </html>
