@@ -1,135 +1,151 @@
-const startBtn = document.querySelector('.start-btn');
-const nextBtn = document.querySelector('.next-btn');
-const quizContainer = document.querySelector('.container');
-const landingPage = document.querySelector('.landing-page');
-const resultBox = document.querySelector('.result-box');
-const questionsElm = document.querySelector('.questions');
-const answerBtnsElm = document.querySelector('.answer-buttons');
-let timerElm = document.querySelector('.timer');
+// variables
+var startButton = document.querySelector("#start-button");
+var questionCard = document.querySelector("#question-cards");
+var timerElement = document.querySelector(".timer-count");
+var questionElement = document.querySelector("#question");
+var optionsButtonElement = document.querySelector("answer-buttons");
+var points = document.querySelector(".points");
+var enterInitialsForm = document.querySelector("#initials-form");
+var submitButton = document.querySelector(".form-button");
+var scoreboardPlayAgain = document.querySelector("#scoreboard");
+var startPage = document.querySelector(".quiz-start");
+var initials = document.querySelector("#initials")
+var highscoreEl = document.querySelector(".highscore")
+var playAgainBtn = document.querySelector("#playagain-btn")
 
-let shuffledQuestions;
-let currentQuestionIndex;
+// click event on start button
+startButton.addEventListener("click", startQuiz);
 
-let timeRemaining = 61;
-let score;
-let timePenalty = 5;
+var timer;
+var timerCount;
+var quizOver;
+var index = 0;
+var pointCounter = 0;
 
-// Start button and timer functionality. Start button hides landing Page and shows the quiz while initalizing the timer.
-startBtn.addEventListener('click', startQuiz);
-nextBtn.addEventListener('click', function () {
-  currentQuestionIndex++;
-  setNextQuestion();
-});
-
-// Array of questions used for the quiz
-const questions = [
+var questions = [
   {
-    question: 'What does CLI stand for?',
-    answers: [
-      { text: 'Common Language Interface', correct: false },
-      { text: 'Computer Language Intuition', correct: false },
-      { text: 'Command Line Interface', correct: true },
-      { text: 'Computer Listening Ideas', correct: false },
-    ],
+    question: "The .addEventListener method is used to ___.",
+    options: ["call a function whenever the specified event is delivered to the target", "add music to the webpage", "remove an event listener from a target", "decode specific text encoding"],
+    answer: 0,
   },
   {
-    question: 'What does HTML stand for?',
-    answers: [
-      { text: 'Home Tool Markup Language', correct: false },
-      { text: 'Hyper Text Markup Language', correct: true },
-      { text: 'Hyperlink and Text Markup Language', correct: false },
-      { text: 'None of the above', correct: false },
-    ],
+    question: "What is a variable?",
+    options: ["a block of code designed to perform a specific task", "storage for a collection of multiple items", "a container for a value", "a method to remove an element from the beginning of an array"],
+    answer: 2,
   },
   {
-    question: 'What implements style to an application?',
-    answers: [
-      { text: 'HTML', correct: false },
-      { text: 'JavaScript', correct: false },
-      { text: 'AWS', correct: false },
-      { text: 'CSS', correct: true },
-    ],
+    question: "What function can you use to create a timer in javascript?",
+    options: [".createInterval()", ".startTimer()", ".setTimer()", ".setInterval()"],
+    answer: 3,
   },
   {
-    question: 'What symbol denotes an id?',
-    answers: [
-      { text: '#', correct: true },
-      { text: '.', correct: false },
-      { text: '/', correct: false },
-      { text: '{', correct: false },
-    ],
+    question: "What is the difference between .textContent and .innerHTML?",
+    options: [".innerHTML gets content from both HTML and CSS", "there's not much of a difference", ".textContent can only be used on Sundays", ".textContent only gets content from <p> elements, while .innerHTML gets content from all elements"],
+    answer: 1,
   },
 ];
 
-// Clears previous answers when calling the next shuffled question stored in the questions index.
-function setNextQuestion() {
-  clearPreviousAnswers();
-  showQuestion(shuffledQuestions[currentQuestionIndex]);
-}
-
-// Starts the quiz function
 function startQuiz() {
-  landingPage.classList.add('hidden');
-  quizContainer.classList.remove('hidden');
-  quizContainer.classList.add('show');
+    quizOver = false;
+    timerCount = 60;
+    startButton.classList.add("hide");
+    questionCard.classList.remove("hide");
+    startTimer();
+    takeQuiz();
+}
 
-  // Sets a timer that counts down once the quiz starts
-  let timerInterval = setInterval(function () {
-    timeRemaining--;
-    timerElm.textContent = 'Time remaining: ' + timeRemaining;
+function startTimer() {
+    timerElement.textContent = timerCount;
+    timer = setInterval(function () {
+      timerCount--;
+      timerElement.textContent = timerCount;
+      if (timerCount >= 0) {
+        if (quizOver && timerCount > 0) {
+          endQuiz();
+        }
+      }
+      if (timerCount === 0) {
+        endQuiz();
+      }
+    }, 1000);
+}
 
-    if (timeRemaining === 0) {
-      clearInterval(timerInterval);
-      timerElm.textContent = 'Time is up!';
+function takeQuiz() {
+    var questionObject = questions[index];
+    questionElement.textContent = questionObject.question;
+    var optionsArray = questionObject.options;
+    document.querySelector("#answer-buttons").innerHTML = "";
+    for (var i = 0; i < optionsArray.length; i++) {
+      var btn = document.createElement("button");
+      btn.addEventListener("click", checkAnswer);
+      btn.classList.add("button");
+      if (i === questionObject.answer) {
+        btn.dataset.correct = true;
+      } else {
+        btn.dataset.incorrect = false;
+      }
+      btn.textContent = optionsArray[i];
+      document.querySelector("#answer-buttons").appendChild(btn);
     }
-  }, 1000);
-
-  // Shuffles the questions so each quiz has a unique order of questions
-  shuffledQuestions = questions.sort(() => Math.random() - 0.5);
-  currentQuestionIndex = 0;
-  setNextQuestion();
 }
-
-// Shows the next question and answer choices when the next button is clicked
-function showQuestion(question) {
-  questionsElm.textContent = question.question;
-  question.answers.forEach((answer) => {
-    const answerBtn = document.createElement('button');
-    answerBtn.textContent = answer.text;
-    answerBtn.classList.add('answer-btn');
-    if (answer.correct) {
-      answerBtn.dataset.correct = answer.correct;
+  
+  
+function checkAnswer(event) {
+    if (event.target.dataset.correct === "true") {
+      document.querySelector("#correct").textContent = "Correct!";
+      pointCounter += 5;
+      console.log(pointCounter);
+    } else {
+      timerCount -= 10;
+      document.querySelector("#correct").textContent = "Incorrect!";
     }
-    answerBtn.addEventListener('click', selectAnswer);
-    answerBtnsElm.appendChild(answerBtn);
-  });
-}
-
-function clearPreviousAnswers() {
-  while (answerBtnsElm.firstChild) {
-    answerBtnsElm.removeChild(answerBtnsElm.firstChild);
+   
+    index++;
+    if (index < questions.length) {
+      takeQuiz();
+    } else {
+      endQuiz();
+    }
   }
-}
-
-function selectAnswer(event) {
-  const selectedBtn = event.target;
-  const correct = selectedBtn.dataset.correct;
-  setStatusClass(document.body, correct);
-  Array.from(answerBtnsElm.children).forEach(answerBtn, function () {
-    setStatusClass(answerBtn, answerBtn.dataset.correct);
-  });
-}
-
-function setStatusClass(element, correct) {
-  clearStatusClass(element);
-  if (correct) {
-    element.classList.add('correct');
-  } else {
-    element.classList.remove('wrong');
+  
+  
+  function endQuiz() {
+    questionCard.classList.add("hide");
+    clearInterval(timer);
+    enterInitialsForm.classList.remove("hide");
+    setPoints()
   }
+  
+  
+  function setPoints() {
+    points.textContent = pointCounter;
+    localStorage.setItem("pointCount", pointCounter);
+}
+  
+  
+function getPoints() {
+    var storedPoints = localStorage.getItem("pointCount");
+    var storedInitials = localStorage.getItem("initials")
+    var finalScore = storedInitials + ": " + storedPoints;
+    var scoreArr = JSON.parse(localStorage.getItem("scoreList")) || [];
+    scoreArr.push(finalScore);
+    localStorage.setItem("scoreList", JSON.stringify(scoreArr));
+    scoreArr.forEach(function(score){ 
+      console.log(scoreArr, score)
+      highscoreEl.textContent += score
+    })
+}
+  
+//   play again event function
+function playAgain(event) {
+    event.preventDefault();
+    enterInitialsForm.classList.add("hide");
+    scoreboardPlayAgain.classList.remove("hide");
+    localStorage.setItem("initials", initials.value);
+    getPoints() 
 }
 
-function clearStatusClass(element) {
-  element.classList.remove('correct');
-  element.classList.remove('wrong');
-}
+// click event on submit score button and play again button
+submitButton.addEventListener("click", playAgain);
+playAgainBtn.addEventListener("click", function(){location.reload()})
+Footer
